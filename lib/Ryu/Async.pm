@@ -11,6 +11,8 @@ Ryu::Async - use L<Ryu> with L<IO::Async>
 
 =head1 SYNOPSIS
 
+# EXAMPLE: examples/synopsis.pl
+
 =head1 DESCRIPTION
 
 This is an L<IO::Async::Notifier> subclass for interacting with L<Ryu>.
