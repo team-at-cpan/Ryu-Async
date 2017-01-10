@@ -1,3 +1,4 @@
+requires 'feature', 0;
 requires 'parent', 0;
 requires 'curry', '>= 1.000';
 requires 'namespace::clean', 0;
