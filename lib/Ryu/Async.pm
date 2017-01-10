@@ -17,8 +17,6 @@ Ryu::Async - use L<Ryu> with L<IO::Async>
 
 This is an L<IO::Async::Notifier> subclass for interacting with L<Ryu>.
 
-=head1 METHODS
-
 =cut
 
 use parent qw(IO::Async::Notifier);
@@ -27,7 +25,22 @@ use IO::Async::Timer::Periodic;
 use Ryu::Source;
 use curry::weak;
 
+=head1 METHODS
+
+=cut
+
 =head2 from
+
+Creates a new L<Ryu::Source> from a thing.
+
+The exact details of this are likely to change in future, but a few things that are expected to work:
+
+ $ryu->from($io_async_stream_instance)
+     ->by_line
+     ->each(sub { print "Line: $_\n" });
+ $ryu->from([1..1000])
+     ->sum
+     ->each(sub { print "Total was $_\n" });
 
 =cut
 
@@ -56,7 +69,7 @@ sub from {
             }
             return $src;
         } else {
-            die "whatevs";
+            die "Unable to determine appropriate source for $class";
         }
     } elsif(my $ref = ref $_[0]) {
         if($ref eq 'ARRAY') {
@@ -66,6 +79,7 @@ sub from {
                 $src->emit(shift @pending);
                 $self->loop->later(__SUB__);
             })->();
+            return $src;
         } else {
             die "Unknown type $ref"
         }
@@ -90,12 +104,25 @@ sub from {
 
 =head2 timer
 
+Provides a L<Ryu::Source> which emits an empty string at selected intervals.
+
+Takes the following named parameters:
+
+=over 4
+
+=item * interval - how often to trigger the timer, in seconds (fractional values allowed)
+
+=item * reschedule - type of rescheduling to use, can be C<soft>, C<hard> or C<drift> as documented
+in L<IO::Async::Timer::Periodic>
+
+=back
+
 =cut
 
 sub timer {
     my ($self, %args) = @_;
     my $src = $self->source(label => 'timer');
-    my $code = $src->curry::weak::emit(1);
+    my $code = $src->curry::weak::emit('');
     $self->add_child(
         my $timer = IO::Async::Timer::Periodic->new(
             %args,
@@ -154,5 +181,5 @@ Tom Molesworth <TEAM@cpan.org>
 
 =head1 LICENSE
 
-Copyright Tom Molesworth 2011-2016. Licensed under the same terms as Perl itself.
+Copyright Tom Molesworth 2011-2017. Licensed under the same terms as Perl itself.
 
