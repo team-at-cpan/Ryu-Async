@@ -5,7 +5,7 @@ requires 'Ryu', '>= 0.002';
 requires 'IO::Async', '>= 0.60';
 
 recommends 'Heap', 0;
-recommends 'IO::Async::SSL', '>= 0.60';
+recommends 'IO::Async::SSL', '>= 0.19';
 
 on 'test' => sub {
 	requires 'Test::More', '>= 0.98';
