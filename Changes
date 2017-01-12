@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.002     2017-01-12 21:51:25+08:00 Asia/Kuala_Lumpur
     No new features.
 
     Distribution metadata:
