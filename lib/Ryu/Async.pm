@@ -1,4 +1,4 @@
-package Ryu::Async 0.001;
+package Ryu::Async 0.002;
 # ABSTRACT: IO::Async support for Ryu stream management
 use strict;
 use warnings;

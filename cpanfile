@@ -11,5 +11,9 @@ on 'test' => sub {
 	requires 'Test::More', '>= 0.98';
 	requires 'Test::Fatal', '>= 0.010';
 	requires 'Test::Refcount', '>= 0.07';
+
+	requires 'indirect', 0;
+	requires 'Variable::Disposition', '>= 0.004';
+	requires 'Test::Deep', '>= 1.126';
 };
 

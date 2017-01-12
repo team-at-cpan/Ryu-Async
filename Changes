@@ -1,6 +1,13 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    No new features.
+
+    Distribution metadata:
+
+    * perl version is now listed in `requires`, rather than just
+    `build_requires` - thanks to Mohammad S Anwar for the idea
+    * `provides` metadata added
 
 0.001     2017-01-11 02:02:36+08:00 Asia/Kuala_Lumpur
-Initial CPAN release
+    Initial CPAN release
