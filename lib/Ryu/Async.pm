@@ -1,7 +1,9 @@
-package Ryu::Async 0.002;
+package Ryu::Async;
 # ABSTRACT: IO::Async support for Ryu stream management
 use strict;
 use warnings;
+
+our $VERSION = '0.003';
 
 use feature qw(current_sub);
 
