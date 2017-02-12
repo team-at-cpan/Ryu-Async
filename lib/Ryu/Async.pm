@@ -119,6 +119,11 @@ in L<IO::Async::Timer::Periodic>
 
 =back
 
+Example:
+
+ $ryu->timer(interval => 1, reschedule => 'hard')
+     ->combine_latest(...)
+
 =cut
 
 sub timer {
