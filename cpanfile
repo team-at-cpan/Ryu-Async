@@ -1,7 +1,7 @@
 requires 'parent', 0;
 requires 'curry', '>= 1.000';
 requires 'namespace::clean', 0;
-requires 'Ryu', '>= 0.011';
+requires 'Ryu', '>= 0.013';
 requires 'Future', '>= 0.34';
 requires 'IO::Async', '>= 0.60';
 

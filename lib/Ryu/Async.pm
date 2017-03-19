@@ -3,9 +3,7 @@ package Ryu::Async;
 use strict;
 use warnings;
 
-our $VERSION = '0.004';
-
-use feature qw(current_sub);
+our $VERSION = '0.003';
 
 =head1 NAME
 
@@ -47,8 +45,8 @@ The exact details of this are likely to change in future, but a few things that 
 =cut
 
 sub from {
-    use Scalar::Util qw(blessed);
-    use namespace::clean qw(blessed);
+    use Scalar::Util qw(blessed weaken);
+    use namespace::clean qw(blessed weaken);
     my $self = shift;
 
     my $src = $self->source(label => 'from');
@@ -76,11 +74,16 @@ sub from {
     } elsif(my $ref = ref $_[0]) {
         if($ref eq 'ARRAY') {
             my @pending = @{$_[0]};
-            (sub {
-                return unless @pending;
-                $src->emit(shift @pending);
-                $self->loop->later(__SUB__);
-            })->();
+            my $code;
+            $code = sub {
+                if(@pending) {
+                    $src->emit(shift @pending);
+                    $self->loop->later($code);
+                } else {
+                    weaken($code);
+                }
+            };
+            $code->();
             return $src;
         } else {
             die "Unknown type $ref"
@@ -90,15 +93,18 @@ sub from {
     my %args = @_;
     if(my $dir = $args{directory}) {
         opendir my $handle, $dir or die $!;
-        (sub {
+        my $code;
+        $code = sub {
             if(defined(my $item = readdir $handle)) {
                 $src->emit($item) unless $item eq '.' or $item eq '..';
-                $self->loop->later(__SUB__);
+                $self->loop->later($code);
             } else {
+                weaken($code);
                 closedir $handle or die $!;
                 $src->finish
             }
-        })->();
+        };
+        $code->();
         return $self;
     }
     die "unknown stuff";
