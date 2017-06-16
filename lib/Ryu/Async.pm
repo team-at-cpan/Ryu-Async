@@ -134,6 +134,24 @@ sub from_stream {
     return $src;
 }
 
+=head2 from_stream
+
+Create a new L<Ryu::Source> that wraps STDIN.
+
+As with other L<IO::Async::Stream> wrappers, this will emit data as soon as it's available,
+as raw bytes.
+
+Use L<Ryu::Source/by_line> and L<Ryu::Source/decode> to split into lines and/or decode from UTF-8.
+
+=cut
+
+sub stdin {
+    my ($self) = @_;
+    return $self->from_stream(
+        IO::Async::Stream->new_for_stdin
+    )
+}
+
 =head2 timer
 
 Provides a L<Ryu::Source> which emits an empty string at selected intervals.
