@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.005     2017-06-17 01:30:50+08:00 Asia/Kuala_Lumpur
     New features:
 
     * ->stdin helper
