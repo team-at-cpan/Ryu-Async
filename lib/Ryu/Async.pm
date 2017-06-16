@@ -22,8 +22,11 @@ This is an L<IO::Async::Notifier> subclass for interacting with L<Ryu>.
 use parent qw(IO::Async::Notifier);
 
 use IO::Async::Timer::Periodic;
+use IO::Async::Stream;
 use Ryu::Source;
 use curry::weak;
+
+use Log::Any qw($log);
 
 =head1 METHODS
 
@@ -116,6 +119,7 @@ sub from_stream {
     $stream->configure(
         on_read => sub {
             my ($stream, $buffref, $eof) = @_;
+            $log->tracef("Have %d bytes of data, EOF = %s", length($$buffref), $eof ? 'yes' : 'no');
             my $data = substr $$buffref, 0, length $$buffref, '';
             $src->emit($data);
             $src->finish if $eof && !$src->completed->is_ready;
