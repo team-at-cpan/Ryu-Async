@@ -54,7 +54,7 @@ sub from {
 
     if(my $class = blessed $_[0]) {
         if($class->isa('IO::Async::Stream')) {
-            return $self->from_stream($class);
+            return $self->from_stream($_[0]);
         } else {
             die "Unable to determine appropriate source for $class";
         }
