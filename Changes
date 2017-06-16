@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    No new features.
+
+    Bugs fixed:
+
+    * requires newer Ryu::Source to get examples/cat.pl working.
 
 0.005     2017-06-17 01:30:50+08:00 Asia/Kuala_Lumpur
     New features:
