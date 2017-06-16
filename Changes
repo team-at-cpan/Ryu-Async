@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    New features:
+
+    * ->stdin helper
+    * ->from_stream now available as a method, might be more readable this way
 
 0.004     2017-03-26 11:51:12+08:00 Asia/Kuala_Lumpur
     No new features.
