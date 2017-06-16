@@ -179,6 +179,7 @@ sub timer {
     my $src = $self->source(label => 'timer');
     $self->add_child(
         my $timer = IO::Async::Timer::Periodic->new(
+            reschedule => 'hard',
             %args,
             on_tick => $src->curry::weak::emit(''),
         )
