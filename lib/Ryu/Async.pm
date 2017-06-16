@@ -49,29 +49,16 @@ sub from {
     use namespace::clean qw(blessed weaken);
     my $self = shift;
 
-    my $src = $self->source(label => 'from');
     if(my $class = blessed $_[0]) {
         if($class->isa('IO::Async::Stream')) {
-            my $stream = shift;
-            $stream->configure(
-                on_read => sub {
-                    my ($stream, $buffref, $eof) = @_;
-                    my $data = substr $$buffref, 0, length $$buffref, '';
-                    $src->emit($data);
-                    $src->finish if $eof && !$src->completed->is_ready;
-                }
-            );
-            unless($stream->parent) {
-                $self->add_child($stream);
-                $src->completed->on_ready(sub {
-                    $self->remove_child($stream) if $stream->parent;
-                });
-            }
-            return $src;
+            return $self->from_stream($class);
         } else {
             die "Unable to determine appropriate source for $class";
         }
-    } elsif(my $ref = ref $_[0]) {
+    }
+
+    my $src = $self->source(label => 'from');
+    if(my $ref = ref $_[0]) {
         if($ref eq 'ARRAY') {
             my @pending = @{$_[0]};
             my $code;
@@ -109,6 +96,38 @@ sub from {
         return $self;
     }
     die "unknown stuff";
+}
+
+=head2 from_stream
+
+Create a new L<Ryu::Source> from an L<IO::Async::Stream> instance.
+
+Note that a stream which is not already attached to an L<IO::Async::Notifier>
+will be added as a child of this instance.
+
+=cut
+
+sub from_stream {
+    use Scalar::Util qw(blessed weaken);
+    use namespace::clean qw(blessed weaken);
+    my ($self, $stream) = @_;
+
+    my $src = $self->source(label => 'from');
+    $stream->configure(
+        on_read => sub {
+            my ($stream, $buffref, $eof) = @_;
+            my $data = substr $$buffref, 0, length $$buffref, '';
+            $src->emit($data);
+            $src->finish if $eof && !$src->completed->is_ready;
+        }
+    );
+    unless($stream->parent) {
+        $self->add_child($stream);
+        $src->completed->on_ready(sub {
+            $self->remove_child($stream) if $stream->parent;
+        });
+    }
+    return $src;
 }
 
 =head2 timer
