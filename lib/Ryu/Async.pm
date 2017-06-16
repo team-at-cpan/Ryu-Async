@@ -80,7 +80,8 @@ sub from {
                     $src->emit(shift @pending);
                     $self->loop->later($code);
                 } else {
-                    weaken($code);
+                    $src->finish;
+                    weaken($_) for $src, $code, $self;
                 }
             };
             $code->();
