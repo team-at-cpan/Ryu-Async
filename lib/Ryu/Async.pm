@@ -136,13 +136,10 @@ Example:
 sub timer {
     my ($self, %args) = @_;
     my $src = $self->source(label => 'timer');
-    my $code = $src->curry::weak::emit('');
     $self->add_child(
         my $timer = IO::Async::Timer::Periodic->new(
             %args,
-            on_tick => sub {
-                $code->();
-            },
+            on_tick => $src->curry::weak::emit(''),
         )
     );
     Scalar::Util::weaken($timer);
