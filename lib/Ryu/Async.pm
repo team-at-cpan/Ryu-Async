@@ -48,6 +48,10 @@ use Variable::Disposition qw(retain_future);
 use Log::Any qw($log);
 use Syntax::Keyword::Try;
 
+use Ryu::Source;
+
+use Ryu::Async::Process;
+
 =head1 METHODS
 
 =cut
@@ -227,17 +231,24 @@ sub timer {
 
 =head2 run
 
+Creates an L<IO::Async::Process>.
+
 =cut
 
 sub run {
-    my $self = shift;
-    my $code = shift;
+    my ($self, $code, %args) = @_;
     if(ref($code) eq 'ARRAY') {
         # Fork and exec
-        ...
+        $args{command} = $code;
     } elsif(ref($code) eq 'CODE') {
-        ...
+        $args{code} = $code;
     }
+    $self->add_child(
+        my $process = Ryu::Async::Process->new(
+            process => IO::Async::Process->new(%args)
+        )
+    );
+    $process;
 }
 
 =head2 source
