@@ -225,6 +225,21 @@ sub timer {
     $src
 }
 
+=head2 run
+
+=cut
+
+sub run {
+    my $self = shift;
+    my $code = shift;
+    if(ref($code) eq 'ARRAY') {
+        # Fork and exec
+        ...
+    } elsif(ref($code) eq 'CODE') {
+        ...
+    }
+}
+
 =head2 source
 
 Returns a new L<Ryu::Source> instance.
