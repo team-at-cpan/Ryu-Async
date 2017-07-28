@@ -203,12 +203,15 @@ Returns a new L<Ryu::Source> instance.
 
 sub source {
     my ($self, %args) = @_;
-    my $label = delete($args{label}) // (caller 1)[3];
-    $label =~ s/^Net::Async::/Na/g;
-    $label =~ s/^IO::Async::/Ia/g;
-    $label =~ s/^Web::Async::/Wa/g;
-    $label =~ s/^Tickit::Async::/Ta/g;
-    $label =~ s/::([^:]*)$/->$1/;
+    my $label = delete($args{label}) // do {
+        my $label = (caller 1)[3];
+        $label =~ s/^Net::Async::/Na/g;
+        $label =~ s/^IO::Async::/Ia/g;
+        $label =~ s/^Web::Async::/Wa/g;
+        $label =~ s/^Tickit::Async::/Ta/g;
+        $label =~ s/::([^:]*)$/->$1/;
+        $label
+    };
     Ryu::Source->new(
         new_future => $self->loop->curry::weak::new_future,
         label      => $label,
