@@ -152,6 +152,16 @@ sub stdin {
     )
 }
 
+=head2 stdout
+
+Returns a new L<Ryu::Sink> that wraps STDOUT.
+
+=cut
+
+sub stdout {
+    my ($self) = @_;
+}
+
 =head2 timer
 
 Provides a L<Ryu::Source> which emits an empty string at selected intervals.
