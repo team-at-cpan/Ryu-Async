@@ -229,6 +229,30 @@ sub source {
     )
 }
 
+=head2 sink
+
+Returns a new L<Ryu::Sink>.
+
+=cut
+
+sub sink {
+    my ($self, %args) = @_;
+    my $label = delete($args{label}) // do {
+        my $label = (caller 1)[3];
+        $label =~ s/^Net::Async::/Na/g;
+        $label =~ s/^IO::Async::/Ia/g;
+        $label =~ s/^Web::Async::/Wa/g;
+        $label =~ s/^Tickit::Async::/Ta/g;
+        $label =~ s/::([^:]*)$/->$1/;
+        $label
+    };
+    Ryu::Sink->new(
+        new_future => $self->loop->curry::weak::new_future,
+        label      => $label,
+        %args,
+    )
+}
+
 1;
 
 __END__
