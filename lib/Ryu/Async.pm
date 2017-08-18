@@ -195,7 +195,7 @@ sub timer {
         )
     );
     Scalar::Util::weaken($timer);
-    $src->on_ready($self->_capture_weakself(sub {
+    $src->on_ready($self->$curry::weak(sub {
         my ($self) = @_;
         return unless $timer;
         $timer->stop if $timer->is_running;
