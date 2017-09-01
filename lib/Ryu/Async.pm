@@ -21,8 +21,17 @@ This is an L<IO::Async::Notifier> subclass for interacting with L<Ryu>.
 
 use parent qw(IO::Async::Notifier);
 
-use IO::Async::Timer::Periodic;
+use IO::Async::Handle;
+use IO::Async::Listener;
+use IO::Async::Process;
+use IO::Async::Resolver;
+use IO::Async::Signal;
+use IO::Async::Socket;
 use IO::Async::Stream;
+use IO::Async::Timer::Absolute;
+use IO::Async::Timer::Countdown;
+use IO::Async::Timer::Periodic;
+
 use Ryu::Source;
 use curry::weak;
 
