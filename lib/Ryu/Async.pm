@@ -226,10 +226,23 @@ sub source {
         $label
     };
     Ryu::Source->new(
-        new_future => $self->loop->curry::weak::new_future,
-        label      => $label,
+        new_future    => $self->loop->curry::weak::new_future,
+        apply_timeout => $self->curry::timeout,
+        label         => $label,
         %args,
     )
+}
+
+sub timeout {
+    my ($self, $input, $output, $delay) = @_;
+    $self->add_child(
+        my $timer = IO::Async::Timer::Countdown->new(
+            interval => $delay,
+            on_expire => sub { $output->fail('timeout') },
+        )
+    );
+    $input->each_while_source(sub { $timer->reset }, $output);
+    return $self;
 }
 
 =head2 sink
