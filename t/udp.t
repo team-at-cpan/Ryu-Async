@@ -6,7 +6,6 @@ use Test::Fatal;
 
 use IO::Async::Loop;
 use Ryu::Async;
-use Log::Any::Adapter qw(TAP);
 
 my $loop = IO::Async::Loop->new;
 
