@@ -215,11 +215,14 @@ sub source {
     my ($self, %args) = @_;
     my $label = delete($args{label}) // do {
         my $label = (caller 1)[3];
-        $label =~ s/^Net::Async::/Na/g;
-        $label =~ s/^IO::Async::/Ia/g;
-        $label =~ s/^Web::Async::/Wa/g;
-        $label =~ s/^Tickit::Async::/Ta/g;
-        $label =~ s/::([^:]*)$/->$1/;
+        for($label) {
+            s/^Net::Async::/Na/g;
+            s/^IO::Async::/Ia/g;
+            s/^Web::Async::/Wa/g;
+            s/^Tickit::Async::/Ta/g;
+            s/^Tickit::Widget::/TW/g;
+            s/::([^:]*)$/->$1/;
+        }
         $label
     };
     Ryu::Source->new(
