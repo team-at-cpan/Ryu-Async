@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.007     2017-09-01 21:03:27+08:00 Asia/Kuala_Lumpur
     New features:
 
     * Basic timeout support
