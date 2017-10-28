@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.008     2017-10-28 23:26:00+08:00 Asia/Kuala_Lumpur
     Bugs fixed:
 
     * added IO::Socket::IP to dependency list
