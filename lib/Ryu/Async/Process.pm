@@ -47,7 +47,16 @@ sub stderr {
     )
 }
 
-sub ryu { shift->{ryu} }
+sub ryu {
+    my ($self) = @_;
+    $self->{ryu} //= do {
+        require Ryu::Async;
+        $self->add_child(
+            my $ryu = Ryu::Async->new
+        );
+        $ryu
+    }
+}
 
 sub configure {
     my ($self, %args) = @_;
@@ -60,4 +69,13 @@ sub configure {
 }
 
 1;
+
+=head1 AUTHOR
+
+Tom Molesworth <TEAM@cpan.org>
+
+=head1 LICENSE
+
+Copyright Tom Molesworth 2017. Licensed under the same terms as Perl itself.
+
 
