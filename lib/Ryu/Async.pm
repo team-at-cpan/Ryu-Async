@@ -362,7 +362,7 @@ sub udp_server {
                 $src->emit(
                     Ryu::Async::Packet->new(
                         payload => $msg, 
-                        from => $addr
+                        from    => $addr
                     )
                 )
             },
@@ -402,6 +402,27 @@ sub timeout {
 
 Returns a new L<Ryu::Sink>.
 
+The label will default to the calling package/class and method,
+with some truncation rules:
+
+=over 4
+
+=item * A C<Net::Async::> prefix will be replaced by C<Na>.
+
+=item * A C<Web::Async::> prefix will be replaced by C<Wa>.
+
+=item * A C<IO::Async::> prefix will be replaced by C<Ia>.
+
+=item * A C<Tickit::Async::> prefix will be replaced by C<Ta>.
+
+=item * A C<Tickit::Widget::> prefix will be replaced by C<TW>.
+
+=back
+
+This list of truncations is subject to change, so please don't
+rely on any of these in string matches or similar - better to set
+your own label if you need consistency.
+
 =cut
 
 sub sink {
@@ -412,6 +433,7 @@ sub sink {
         $label =~ s/^IO::Async::/Ia/g;
         $label =~ s/^Web::Async::/Wa/g;
         $label =~ s/^Tickit::Async::/Ta/g;
+        $label =~ s/^Tickit::Widget::/TW/g;
         $label =~ s/::([^:]*)$/->$1/;
         $label
     };
