@@ -9,10 +9,14 @@ requires 'Ryu', '>= 0.024';
 requires 'Future', '>= 0.35';
 requires 'IO::Async', '>= 0.71';
 requires 'IO::Socket::IP', '>= 0.37';
+
 requires 'Syntax::Keyword::Try';
 
 recommends 'Heap', 0;
 recommends 'IO::Async::SSL', '>= 0.19';
+
+recommends 'IO::AsyncX::Sendfile', '>= 0.002';
+recommends 'IO::AsyncX::System', '>= 0.003';
 
 on 'test' => sub {
 	requires 'Test::More', '>= 0.98';
