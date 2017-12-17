@@ -303,6 +303,18 @@ Creates a new UDP client.
 This will return a L<Ryu::Async::Connection> instance, which provides
 a sink for outgoing packets, and a source for incoming responses.
 
+=over 4
+
+=item * C<uri> - an optional URI of the form C<< udp://host:port >>
+
+=item * C<host> - which host to listen on, defaults to C<0.0.0.0>
+
+=item * C<port> - the port to listen on
+
+=back
+
+Returns a L<Ryu::Async::Client> instance.
+
 =cut
 
 sub udp_client {
