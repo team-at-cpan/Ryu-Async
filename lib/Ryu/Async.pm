@@ -300,8 +300,7 @@ sub source {
 
 Creates a new UDP client.
 
-This will return a L<Ryu::Async::Connection> instance, which provides
-a sink for outgoing packets, and a source for incoming responses.
+This provides a sink for L<Ryu::Async::Client/outgoing> packets, and a source for L<Ryu::Async::Client/incoming> responses.
 
 =over 4
 
@@ -325,14 +324,27 @@ sub udp_client {
     $uri = URI->new($uri) unless ref $uri;
     $log->debugf("UDP client for %s", $uri->as_string);
 
+    my $src = $self->source(
+        label => $args{label} // $uri->as_string,
+    );
     my $sink = $self->sink(
         label => $args{label} // $uri->as_string,
     );
     $self->add_child(
         my $client = IO::Async::Socket->new(
             on_recv => sub {
-                my ($sock, $msg, $addr) = @_;
-                warn "Client received $msg from $addr";
+                my ($sock, $payload, $addr) = @_;
+                try {
+                    $log->tracef("Receiving [%s] from %s", $payload, $addr);
+                    $src->emit(
+                        Ryu::Async::Packet->new(
+                            from => $addr,
+                            payload => $payload
+                        )
+                    );
+                } catch {
+                    $log->errorf("Exception when sending: %s", $@);
+                }
             },
         )
     );
@@ -359,7 +371,7 @@ sub udp_client {
     });
     Ryu::Async::Client->new(
         outgoing => $sink,
-        incoming => undef
+        incoming => $src,
     );
 }
 
