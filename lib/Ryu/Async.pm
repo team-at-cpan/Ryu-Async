@@ -43,7 +43,6 @@ use URI::udp;
 use URI::tcp;
 
 use curry::weak;
-use Variable::Disposition qw(retain_future);
 
 use Log::Any qw($log);
 use Syntax::Keyword::Try;
@@ -337,16 +336,14 @@ sub udp_client {
     });
     $sink->source->each(sub {
         my $payload = $_;
-        retain_future(
-            $f->on_done(sub {
-                try {
-                    $log->tracef("Sending [%s] to %s", $payload, $uri);
-                    $client->send($payload);
-                } catch {
-                    $log->errorf("Exception when sending: %s", $@);
-                }
-            })
-        );
+        $f->on_done(sub {
+            try {
+                $log->tracef("Sending [%s] to %s", $payload, $uri);
+                $client->send($payload);
+            } catch {
+                $log->errorf("Exception when sending: %s", $@);
+            }
+        })->retain;
     });
     Ryu::Async::Client->new(
         outgoing => $sink,
