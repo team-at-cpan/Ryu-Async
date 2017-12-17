@@ -471,6 +471,7 @@ sub sink {
         $label =~ s/^Net::Async::/Na/g;
         $label =~ s/^IO::Async::/Ia/g;
         $label =~ s/^Web::Async::/Wa/g;
+        $label =~ s/^Job::Async::/Ja/g;
         $label =~ s/^Tickit::Async::/Ta/g;
         $label =~ s/^Tickit::Widget::/TW/g;
         $label =~ s/::([^:]*)$/->$1/;
