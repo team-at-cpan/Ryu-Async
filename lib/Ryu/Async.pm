@@ -158,7 +158,25 @@ sub from_stream {
     return $src;
 }
 
-=head2 from_stream
+sub to_stream {
+    use Scalar::Util qw(blessed weaken);
+    use namespace::clean qw(blessed weaken);
+    my ($self, $stream) = @_;
+
+    my $sink = $self->sink(label => 'from');
+    $sink->source->each(sub {
+        $stream->write($_)
+    });
+#    unless($stream->parent) {
+#        $self->add_child($stream);
+#        $sink->source->on_ready(sub {
+#            $self->remove_child($stream) if $stream->parent;
+#        });
+#    }
+    return $sink;
+}
+
+=head2 stdin
 
 Create a new L<Ryu::Source> that wraps STDIN.
 
