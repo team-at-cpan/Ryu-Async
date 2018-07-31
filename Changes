@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    No new features.
+
+    Bugs fixed:
+
+    - the ->timer method was emitting extra events
 
 0.009     2017-12-28 01:15:18+08:00 Asia/Kuala_Lumpur
     New features:

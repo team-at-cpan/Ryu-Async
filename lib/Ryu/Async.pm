@@ -233,7 +233,7 @@ sub timer {
         my $timer = IO::Async::Timer::Periodic->new(
             reschedule => 'hard',
             %args,
-            on_tick => $src->curry::weak::emit(''),
+            on_tick => $src->$curry::weak(sub { shift->emit('') }),
         )
     );
     Scalar::Util::weaken($timer);
