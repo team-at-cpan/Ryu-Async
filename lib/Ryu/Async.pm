@@ -277,7 +277,7 @@ Returns a new L<Ryu::Source> instance.
 sub source {
     my ($self, %args) = @_;
     my $label = delete($args{label}) // do {
-        my $label = (caller 1)[3];
+        my $label = (caller 1)[0];
         for($label) {
             s/^Net::Async::/Na/g;
             s/^IO::Async::/Ia/g;
