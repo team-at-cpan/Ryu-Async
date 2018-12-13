@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.012     2018-12-13 22:31:05+08:00 Asia/Kuala_Lumpur
     New features:
 
     - the ->to_stream and ->from_stream methods use flow
