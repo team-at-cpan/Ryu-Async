@@ -211,6 +211,9 @@ Returns a new L<Ryu::Sink> that wraps STDOUT.
 
 sub stdout {
     my ($self) = @_;
+    return $self->to_stream(
+        IO::Async::Stream->new_for_stdout
+    )
 }
 
 =head2 timer
@@ -514,5 +517,5 @@ Tom Molesworth <TEAM@cpan.org>
 
 =head1 LICENSE
 
-Copyright Tom Molesworth 2011-2017. Licensed under the same terms as Perl itself.
+Copyright Tom Molesworth 2011-2018. Licensed under the same terms as Perl itself.
 
