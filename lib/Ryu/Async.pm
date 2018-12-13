@@ -47,6 +47,7 @@ use curry::weak;
 use Log::Any qw($log);
 use Syntax::Keyword::Try;
 
+use Ryu '0.030';
 use Ryu::Source;
 
 use Ryu::Async::Process;
