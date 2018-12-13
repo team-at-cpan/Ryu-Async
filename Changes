@@ -1,6 +1,14 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    New features:
+
+    - the ->to_stream and ->from_stream methods use flow
+    control notifications from the source/sink to enable
+    or disable read/write notifications appropriately:
+    this allows chained actions on a source to push back
+    on incoming data if it's not being processed quickly
+    enough.
 
 0.011     2018-12-02 14:22:37+08:00 Asia/Kuala_Lumpur
     No new features.
