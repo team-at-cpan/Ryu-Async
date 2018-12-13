@@ -171,11 +171,12 @@ sub to_stream {
     my ($self, $stream) = @_;
 
     my $sink = $self->sink(label => 'from');
-    $src->flow_control
+    $sink->flow_control
         ->each($stream->curry::weak::want_writeready);
-    $sink->source->each(sub {
-        $stream->write($_)
-    });
+    $sink->source
+        ->each(sub {
+            $stream->write($_)
+        });
 #    unless($stream->parent) {
 #        $self->add_child($stream);
 #        $sink->source->on_ready(sub {
