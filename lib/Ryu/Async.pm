@@ -139,6 +139,14 @@ sub from_stream {
     my ($self, $stream) = @_;
 
     my $src = $self->source(label => 'from');
+
+    # Our ->flow_control monitoring gives us a boolean
+    # value every time the state changes:
+    # 1 - we are active
+    # 0 - we are paused
+    $src->flow_control
+        ->each($stream->curry::weak::want_readready);
+
     $stream->configure(
         on_read => sub {
             my ($stream, $buffref, $eof) = @_;
@@ -163,6 +171,8 @@ sub to_stream {
     my ($self, $stream) = @_;
 
     my $sink = $self->sink(label => 'from');
+    $src->flow_control
+        ->each($stream->curry::weak::want_writeready);
     $sink->source->each(sub {
         $stream->write($_)
     });
