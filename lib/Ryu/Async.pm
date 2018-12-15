@@ -88,17 +88,19 @@ sub from {
     if(my $ref = ref $_[0]) {
         if($ref eq 'ARRAY') {
             my @pending = @{$_[0]};
+            weaken(my $weak_src = $src);
             my $code;
             $code = sub {
+                my $src = $weak_src;
+                $src->emit(shift @pending) if @pending and $src;
                 if(@pending) {
-                    $src->emit(shift @pending);
                     $self->loop->later($code);
                 } else {
                     $src->finish;
-                    weaken($_) for $src, $code, $self;
+                    weaken $_ for $self, $code;
                 }
             };
-            $code->();
+            $self->loop->later($code);
             return $src;
         } else {
             die "Unknown type $ref"
