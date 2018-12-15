@@ -26,4 +26,3 @@ ok($src->completed->is_ready, 'source is marked as finished');
 
 done_testing;
 
-
