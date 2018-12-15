@@ -147,6 +147,9 @@ sub from_stream {
     # value every time the state changes:
     # 1 - we are active
     # 0 - we are paused
+    # through sheer coïncidence, this is also what the
+    # IO::Async::Stream `->want_(read|write)ready` methods
+    # expect.
     $src->flow_control
         ->each($stream->curry::weak::want_readready);
 
@@ -174,18 +177,22 @@ sub to_stream {
     my ($self, $stream) = @_;
 
     my $sink = $self->sink(label => 'from');
-    $sink->flow_control
-        ->each($stream->curry::weak::want_writeready);
+
+    $stream->configure(
+        on_writeable_start => $sink->curry::weak::resume,
+        on_writeable_stop  => $sink->curry::weak::pause,
+    );
     $sink->source
         ->each(sub {
             $stream->write($_)
         });
-#    unless($stream->parent) {
-#        $self->add_child($stream);
-#        $sink->source->on_ready(sub {
-#            $self->remove_child($stream) if $stream->parent;
-#        });
-#    }
+    unless($stream->parent) {
+        $self->add_child($stream);
+        $sink->completed->on_ready($self->$curry::weak(sub {
+            my ($self) = @_;
+            $self->remove_child($stream) if $stream->parent;
+        }));
+    }
     return $sink;
 }
 
