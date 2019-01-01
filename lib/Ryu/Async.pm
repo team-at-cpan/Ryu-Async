@@ -424,7 +424,7 @@ sub udp_server {
                 $log->debugf("UDP server [%s] had %s from %s", $uri->as_string, $msg, $addr);
                 $src->emit(
                     Ryu::Async::Packet->new(
-                        payload => $msg, 
+                        payload => $msg,
                         from    => $addr
                     )
                 )
