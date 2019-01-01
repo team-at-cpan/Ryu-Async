@@ -3,7 +3,9 @@ use strict;
 use warnings;
 use IO::Async::Loop;
 use Ryu::Async;
-#
+# This will generate a lot of output, but is useful
+# for demonstrating lifecycles. Drop this to 'info' or
+# 'debug' to make it more realistic.
 use Log::Any::Adapter qw(Stdout), log_level => 'trace';
 #
 my $loop = IO::Async::Loop->new;
