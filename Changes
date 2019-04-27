@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.015     2019-04-28 00:19:50+08:00 Asia/Kuala_Lumpur
     New features:
 
     - very minor change to truncation rules for automatic labelling on ->sink
