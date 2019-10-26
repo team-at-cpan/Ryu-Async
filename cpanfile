@@ -29,3 +29,6 @@ on 'test' => sub {
 	requires 'Test::Deep', '>= 1.126';
 };
 
+on 'develop' => sub {
+    requires 'Devel::Cover::Report::Coveralls', '>= 0.11';
+};
