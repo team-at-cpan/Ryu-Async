@@ -30,5 +30,6 @@ on 'test' => sub {
 };
 
 on 'develop' => sub {
+    requires 'Devel::Cover';
     requires 'Devel::Cover::Report::Coveralls', '>= 0.11';
 };

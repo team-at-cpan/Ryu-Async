@@ -21,3 +21,4 @@ jobs:
         key: cpan-{{ checksum "cpanfile" }}
         paths:
             - /usr/local/lib/perl5/site_perl
+            - /usr/local/bin
