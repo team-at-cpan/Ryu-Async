@@ -1,0 +1,120 @@
+Revision history for Ryu-Async
+
+0.016     2019-11-06 00:08:35+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Dependency updates:
+
+    - pulls in latest (1.008) version of Ryu for some bugfixes
+
+0.015     2019-04-28 00:19:50+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - very minor change to truncation rules for automatic labelling on ->sink
+
+    Dependency updates:
+
+    - pulls in latest (1.003) version of Ryu
+
+0.014     2019-01-02 00:27:05+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Bugs fixed:
+
+    - pull in newer Ryu to ensure that sync/async bridge works as expected.
+
+0.013     2018-12-15 20:54:20+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - support for the writeready events on IO::Async::Stream
+    for Ryu sink flow control
+
+    Bugs fixed:
+
+    - the initial value in a ->from arrayref was not deferred,
+    so it would be emitted before anything had a chance to attach
+    a chained handler
+
+0.012     2018-12-13 22:31:05+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - the ->to_stream and ->from_stream methods use flow
+    control notifications from the source/sink to enable
+    or disable read/write notifications appropriately:
+    this allows chained actions on a source to push back
+    on incoming data if it's not being processed quickly
+    enough.
+
+0.011     2018-12-02 14:22:37+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Bugs fixed:
+
+    - Default label on ->source should use package name
+
+0.010     2018-07-31 23:56:46+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - now aware of Job::Async-related modules
+    - udp_client improvements
+
+    Bugs fixed:
+
+    - the ->timer method was emitting extra events
+    - previous udp_client release would raise spurious warnings
+
+0.009     2017-12-28 01:15:18+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - Initial support for async process handling
+
+0.008     2017-10-28 23:26:00+08:00 Asia/Kuala_Lumpur
+    Bugs fixed:
+
+    - added IO::Socket::IP to dependency list
+
+
+0.007     2017-09-01 21:03:27+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - Basic timeout support
+    - UDP client/server helpers
+
+0.006     2017-06-17 01:43:13+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Bugs fixed:
+
+    - requires newer Ryu::Source to get examples/cat.pl working.
+
+0.005     2017-06-17 01:30:50+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - ->stdin helper
+    - ->from_stream now available as a method, might be more readable this way
+
+0.004     2017-03-26 11:51:12+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Distribution metadata:
+
+    - Update dist.ini
+    - Minimum Ryu version updated
+
+0.003     2017-03-19 23:45:36+08:00 Asia/Kuala_Lumpur
+    New features:
+
+    - Perl 5.14 support
+
+0.002     2017-01-12 21:51:25+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Distribution metadata:
+
+    - perl version is now listed in `requires`, rather than just
+    `build_requires` - thanks to Mohammad S Anwar for the idea
+    - `provides` metadata added
+    - test dependencies updated in `cpanfile`
+
+0.001     2017-01-11 02:02:36+08:00 Asia/Kuala_Lumpur
+    Initial CPAN release
