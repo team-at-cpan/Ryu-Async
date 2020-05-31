@@ -1,6 +1,12 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+    No new features.
+
+    Dependency updates:
+
+    - latest Ryu (1.012) for some bugfixes and new features
+    - Tickit::Async is now only marked as "suggested"
 
 0.016     2019-11-06 00:08:35+08:00 Asia/Kuala_Lumpur
     No new features.
