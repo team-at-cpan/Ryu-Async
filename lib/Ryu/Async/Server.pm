@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 # VERSION
+# AUTHORITY
 
 sub new { bless { @_[1..$#_] }, $_[0] }
 
