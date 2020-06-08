@@ -5,7 +5,7 @@ requires 'namespace::clean', 0;
 requires 'URI::udp', 0;
 requires 'URI::tcp', 0;
 requires 'Log::Any', '>= 1.050';
-requires 'Ryu', '>= 1.012';
+requires 'Ryu', '>= 2.001';
 requires 'Future', '>= 0.45';
 requires 'IO::Async', '>= 0.71';
 requires 'IO::Socket::IP', '>= 0.37';
