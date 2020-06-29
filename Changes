@@ -8,6 +8,11 @@ Revision history for {{$dist->name}}
     - latest Ryu (2.001) for some bugfixes and new features
     - Tickit::Async is now only marked as "suggested"
 
+    Bugs fixed:
+
+    - t/udp.t fails intermittently, since this part of the code is due for a rework
+    the failing test has been marked TODO
+
 0.016     2019-11-06 00:08:35+08:00 Asia/Kuala_Lumpur
     No new features.
 

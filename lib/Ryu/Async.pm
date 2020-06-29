@@ -450,8 +450,8 @@ sub udp_server {
 
 =head2 tcp_server
 
-Creates a listening TCP socket, and provides a L<Ryu::Source>
-which will emit a new event every time a client connects.
+Creates a listening TCP socket, and provides a L<Ryu::Async::Server>
+instance which will emit a new event every time a client connects.
 
 =cut
 
@@ -481,18 +481,15 @@ sub tcp_server {
                     )
                 )
             },
-            on_recv_error => sub {
-                my ($sock, $err) = @_;
-                $src->fail($err);
-            }
         )
     );
     $sink->source->each(sub { $server->send($_->payload, 0, $_->addr) });
-    my $port_f = $server->bind(
+    my $port_f = $server->listen(
         service  => $uri->port // 0,
         socktype => 'stream'
     )->then(sub {
-        Future->done($server->write_handle->sockport)
+        my ($listener) = @_;
+        Future->done($listener->read_handle->sockport)
     });
     Ryu::Async::Server->new(
         port     => $port_f,
