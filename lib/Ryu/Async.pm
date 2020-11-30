@@ -3,7 +3,7 @@ package Ryu::Async;
 use strict;
 use warnings;
 
-our $VERSION = '0.017';
+our $VERSION = '0.018';
 
 =head1 NAME
 
@@ -38,6 +38,7 @@ use Ryu::Async::Server;
 
 use Ryu::Sink;
 use Ryu::Source;
+use Ryu::Exception;
 
 use URI::udp;
 use URI::tcp;
@@ -47,8 +48,6 @@ use curry::weak;
 use Syntax::Keyword::Try;
 
 use Ryu '2.000';
-use Ryu::Source;
-use Ryu::Exception;
 
 use Ryu::Async::Process;
 use Scalar::Util qw(blessed weaken);
