@@ -439,11 +439,9 @@ sub udp_server {
     my $port_f = $server->bind(
         service  => $uri->port // 0,
         socktype => 'dgram'
-    });
     )->then(sub {
         Future->done($server->write_handle->sockport);
-    }
-    )->on_fail(sub {
+    })->on_fail(sub {
         my $err       = shift;
         my $exception = Ryu::Exception->new(
                 type    => 'udp',
