@@ -48,6 +48,7 @@ use Syntax::Keyword::Try;
 
 use Ryu '2.000';
 use Ryu::Source;
+use Ryu::Exception;
 
 use Ryu::Async::Process;
 use Scalar::Util qw(blessed weaken);
@@ -438,8 +439,19 @@ sub udp_server {
     my $port_f = $server->bind(
         service  => $uri->port // 0,
         socktype => 'dgram'
+    });
     )->then(sub {
-        Future->done($server->write_handle->sockport)
+        Future->done($server->write_handle->sockport);
+    }
+    )->on_fail(sub {
+        my $err       = shift;
+        my $exception = Ryu::Exception->new(
+                type    => 'udp',
+                message => "UDP server failed to bind to port " . $uri->port // 0,
+                details => [$err]);
+        $log->errorf("%s - %s", $exception->message, $err);
+        Future->fail($exception);
+        $exception->throw;
     });
     Ryu::Async::Server->new(
         port     => $port_f,
