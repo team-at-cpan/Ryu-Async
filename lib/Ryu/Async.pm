@@ -41,6 +41,7 @@ use Ryu::Source;
 
 use URI::udp;
 use URI::tcp;
+use Socket qw(pack_sockaddr_in inet_pton AF_INET);
 
 use curry::weak;
 
@@ -386,7 +387,14 @@ sub udp_client {
         $f->on_done(sub {
             try {
                 $log->tracef("Sending [%s] to %s", $payload, $uri);
-                $client->send($payload, undef, "$host:$port");
+                $client->send(
+                    $payload,
+                    undef,
+                    pack_sockaddr_in(
+                        $port,
+                        '' . inet_pton(AF_INET, $host)
+                    )
+                );
             } catch {
                 $log->errorf("Exception when sending: %s", $@);
             }
