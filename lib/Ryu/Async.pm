@@ -444,7 +444,7 @@ sub udp_server {
         my $err       = shift;
         my $exception = Ryu::Exception->new(
                 type    => 'udp',
-                message => "UDP server failed to bind to port " . $uri->port // 0,
+                message => "UDP server failed to bind to port " . ($uri->port // 0),
                 details => [$err]);
         $log->errorf("%s - %s", $exception->message, $err);
         Future->fail($exception);
@@ -592,4 +592,3 @@ Tom Molesworth <TEAM@cpan.org>
 =head1 LICENSE
 
 Copyright Tom Molesworth 2011-2019. Licensed under the same terms as Perl itself.
-
