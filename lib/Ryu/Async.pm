@@ -362,7 +362,9 @@ sub udp_client {
                         )
                     );
                 } catch {
-                    $log->errorf("Exception when sending: %s", $@);
+                    my $err = "Exception when sending to $host:$port - %s" . $@;
+                    $log->errorf($err);
+                    $src->fail($err) if !$src->is_failed;
                 }
             },
         )
