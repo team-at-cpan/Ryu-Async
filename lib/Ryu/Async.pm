@@ -362,9 +362,7 @@ sub udp_client {
                         )
                     );
                 } catch {
-                    my $err = "Exception when sending to $host:$port - %s" . $@;
-                    $log->errorf($err);
-                    $src->fail($err) if !$src->is_failed;
+                    $log->errorf("Exception when sending: %s", $@);
                 }
             },
         )
@@ -389,7 +387,9 @@ sub udp_client {
                 $log->tracef("Sending [%s] to %s", $payload, $uri);
                 $client->send($payload, undef, "$host:$port");
             } catch {
-                $log->errorf("Exception when sending: %s", $@);
+                my $err = "Exception when sending to $host:$port - %s" . $@;
+                $log->errorf($err);
+                $src->fail($err) if !$src->is_failed;
             }
         })->retain;
     });
