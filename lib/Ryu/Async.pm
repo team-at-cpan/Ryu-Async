@@ -38,7 +38,6 @@ use Ryu::Async::Server;
 
 use Ryu::Sink;
 use Ryu::Source;
-use Ryu::Exception;
 
 use URI::udp;
 use URI::tcp;
@@ -438,18 +437,15 @@ sub udp_server {
     my $port_f = $server->bind(
         service  => $uri->port // 0,
         socktype => 'dgram'
-    )->then(sub {
-        Future->done($server->write_handle->sockport);
-    })->on_fail(sub {
-        my $err       = shift;
-        my $exception = Ryu::Exception->new(
-                type    => 'udp',
-                message => "UDP server failed to bind to port " . ($uri->port // 0),
-                details => [$err]);
-        $log->errorf("%s - %s", $exception->message, $err);
-        Future->fail($exception);
-        $exception->throw;
-    });
+    )->then(
+        sub {
+            Future->done($server->write_handle->sockport);
+        },
+        sub {
+            my $err = "UDP server failed to bind to port " . ($uri->port // 0) . " - " . $_[0];
+            $log->errorf($err);
+            Future->fail($err);
+        });
     Ryu::Async::Server->new(
         port     => $port_f,
         incoming => $src,
