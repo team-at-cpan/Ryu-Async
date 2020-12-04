@@ -380,8 +380,8 @@ sub udp_client {
     })->on_fail(sub {
         $log->errorf("UDP client failed to connect - %s", join ',', @_);
     });
-    $sink->source->each(sub {
-        my $payload = $_;
+    $sink->source->each($sink->$curry::weak( sub {
+        my ($sink_obj, $payload) = @_;
         $f->on_done(sub {
             try {
                 $log->tracef("Sending [%s] to %s", $payload, $uri);
@@ -390,9 +390,10 @@ sub udp_client {
                 my $err = "Exception when sending to $host:$port - %s" . $@;
                 $log->errorf($err);
                 $src->fail($err) if !$src->is_failed;
+                $sink_obj->source->completed->fail($err) if !$sink_obj->source->completed->is_failed;
             }
         })->retain;
-    });
+    }));
     Ryu::Async::Client->new(
         outgoing => $sink,
         incoming => $src,
