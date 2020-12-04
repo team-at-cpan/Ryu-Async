@@ -3,7 +3,7 @@ package Ryu::Async;
 use strict;
 use warnings;
 
-our $VERSION = '0.017';
+our $VERSION = '0.018';
 
 =head1 NAME
 
@@ -47,7 +47,6 @@ use curry::weak;
 use Syntax::Keyword::Try;
 
 use Ryu '2.000';
-use Ryu::Source;
 
 use Ryu::Async::Process;
 use Scalar::Util qw(blessed weaken);
@@ -381,17 +380,19 @@ sub udp_client {
     })->on_fail(sub {
         $log->errorf("UDP client failed to connect - %s", join ',', @_);
     });
-    $sink->source->each(sub {
-        my $payload = $_;
+    $sink->source->each($sink->$curry::weak( sub {
+        my ($sink_obj, $payload) = @_;
         $f->on_done(sub {
             try {
                 $log->tracef("Sending [%s] to %s", $payload, $uri);
                 $client->send($payload, undef, "$host:$port");
             } catch {
-                $log->errorf("Exception when sending: %s", $@);
+                my $err = "Exception when sending to $host:$port - %s" . $@;
+                $src->fail($err) if !$src->is_ready;
+                $sink_obj->source->completed->fail($err) if !$sink_obj->source->completed->is_ready;
             }
         })->retain;
-    });
+    }));
     Ryu::Async::Client->new(
         outgoing => $sink,
         incoming => $src,
@@ -438,9 +439,13 @@ sub udp_server {
     my $port_f = $server->bind(
         service  => $uri->port // 0,
         socktype => 'dgram'
-    )->then(sub {
-        Future->done($server->write_handle->sockport)
-    });
+    )->then(
+        sub {
+            Future->done($server->write_handle->sockport);
+        },
+        sub {
+            Future->fail("UDP server failed to bind to port " . ($uri->port // 0) . " - " . $_[0]);
+        });
     Ryu::Async::Server->new(
         port     => $port_f,
         incoming => $src,

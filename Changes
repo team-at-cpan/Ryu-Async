@@ -2,6 +2,17 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.018     2020-12-04 11:18:48+08:00 Asia/Kuala_Lumpur
+    No new features.
+
+    Dependency updates:
+
+    - latest Future (0.46) for the bugfix
+
+    Bugs fixed:
+
+    - Ryu::Async::udp_server binding to port and Ryu::Async::udp_client sendind data are configured with failure callback
+
 0.017     2020-06-29 11:18:48+08:00 Asia/Kuala_Lumpur
     No new features.
 
