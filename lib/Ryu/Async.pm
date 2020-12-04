@@ -388,9 +388,8 @@ sub udp_client {
                 $client->send($payload, undef, "$host:$port");
             } catch {
                 my $err = "Exception when sending to $host:$port - %s" . $@;
-                $log->errorf($err);
-                $src->fail($err) if !$src->is_failed;
-                $sink_obj->source->completed->fail($err) if !$sink_obj->source->completed->is_failed;
+                $src->fail($err) if !$src->is_ready;
+                $sink_obj->source->completed->fail($err) if !$sink_obj->source->completed->is_ready;
             }
         })->retain;
     }));
@@ -445,9 +444,7 @@ sub udp_server {
             Future->done($server->write_handle->sockport);
         },
         sub {
-            my $err = "UDP server failed to bind to port " . ($uri->port // 0) . " - " . $_[0];
-            $log->errorf($err);
-            Future->fail($err);
+            Future->fail("UDP server failed to bind to port " . ($uri->port // 0) . " - " . $_[0]);
         });
     Ryu::Async::Server->new(
         port     => $port_f,

@@ -2,7 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
-0.018     2020-12-02 11:18:48+08:00 Asia/Kuala_Lumpur
+0.018     2020-12-04 11:18:48+08:00 Asia/Kuala_Lumpur
     No new features.
 
     Dependency updates:
@@ -11,7 +11,7 @@ Revision history for {{$dist->name}}
 
     Bugs fixed:
 
-    - Ryu::Async::udp_server binding to port is configured with failure callback and propagate the error up to alert errors like the port is already in use
+    - Ryu::Async::udp_server binding to port and Ryu::Async::udp_client sendind data are configured with failure callback
 
 0.017     2020-06-29 11:18:48+08:00 Asia/Kuala_Lumpur
     No new features.
