@@ -18,8 +18,6 @@ recommends 'IO::Async::SSL', '>= 0.19';
 recommends 'IO::AsyncX::Sendfile', '>= 0.002';
 recommends 'IO::AsyncX::System', '>= 0.003';
 
-suggests 'Tickit::Async', '>= 0.21';
-
 on 'test' => sub {
 	requires 'Test::More', '>= 0.98';
 	requires 'Test::Fatal', '>= 0.010';
