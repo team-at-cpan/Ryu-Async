@@ -3,7 +3,11 @@ package Ryu::Async;
 use strict;
 use warnings;
 
-our $VERSION = '0.017';
+our $VERSION = '0.018';
+
+use utf8;
+
+=encoding UTF8
 
 =head1 NAME
 
@@ -138,9 +142,9 @@ will be added as a child of this instance.
 =cut
 
 sub from_stream {
-    my ($self, $stream) = @_;
+    my ($self, $stream, %args) = @_;
 
-    my $src = $self->source(label => 'from');
+    my $src = $self->source(label => $args{label} // 'IaStream');
 
     # Our ->flow_control monitoring gives us a boolean
     # value every time the state changes:
@@ -170,10 +174,18 @@ sub from_stream {
     return $src;
 }
 
-sub to_stream {
-    my ($self, $stream) = @_;
+=head2 to_stream
 
-    my $sink = $self->sink(label => 'from');
+Provides a L<Ryu::Sink> that will send data to an L<IO::Async::Stream> instance.
+
+Requires the L<IO::Async::Stream> and will return a new L<Ryu::Sink> instance.
+
+=cut
+
+sub to_stream {
+    my ($self, $stream, %args) = @_;
+
+    my $sink = $self->sink(label => $args{label} // 'IaStream');
 
     $stream->configure(
         on_writeable_start => $sink->curry::weak::resume,
@@ -207,7 +219,8 @@ Use L<Ryu::Source/by_line> and L<Ryu::Source/decode> to split into lines and/or 
 sub stdin {
     my ($self) = @_;
     return $self->from_stream(
-        IO::Async::Stream->new_for_stdin
+        IO::Async::Stream->new_for_stdin,
+        label => 'STDIN',
     )
 }
 
@@ -220,7 +233,22 @@ Returns a new L<Ryu::Sink> that wraps STDOUT.
 sub stdout {
     my ($self) = @_;
     return $self->to_stream(
-        IO::Async::Stream->new_for_stdout
+        IO::Async::Stream->new_for_stdout,
+        label => 'STDOUT',
+    )
+}
+
+=head2 stderr
+
+Returns a new L<Ryu::Sink> that wraps STDERR.
+
+=cut
+
+sub stderr {
+    my ($self) = @_;
+    return $self->to_stream(
+        IO::Async::Stream->new_for_stderr,
+        label => 'STDERR',
     )
 }
 
@@ -590,5 +618,5 @@ Tom Molesworth <TEAM@cpan.org>
 
 =head1 LICENSE
 
-Copyright Tom Molesworth 2011-2019. Licensed under the same terms as Perl itself.
+Copyright Tom Molesworth 2011-2021. Licensed under the same terms as Perl itself.
 
