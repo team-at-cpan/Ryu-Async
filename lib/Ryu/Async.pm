@@ -635,7 +635,7 @@ __END__
 
 =head1 AUTHOR
 
-Tom Molesworth <TEAM@cpan.org>
+Tom Molesworth C<< TEAM@cpan.org >> with contributions from Eyad Arnabeh.
 
 =head1 LICENSE
 
