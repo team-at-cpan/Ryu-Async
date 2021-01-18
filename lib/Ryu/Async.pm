@@ -598,6 +598,14 @@ sub sink {
     )
 }
 
+sub _add_to_loop {
+    my ($self, $loop) = @_;
+
+    $Ryu::Source::FUTURE_FACTORY = sub {
+        $loop->new_future(label => $_[1]);
+    };
+};
+
 1;
 
 __END__
