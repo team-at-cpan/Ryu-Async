@@ -619,11 +619,6 @@ sub sink {
     )
 }
 
-sub _add_to_loop {
-    my ($self, $loop) = @_;
-
-};
-
 1;
 
 __END__
