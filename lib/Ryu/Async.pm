@@ -346,18 +346,7 @@ Returns a new L<Ryu::Source> instance.
 
 sub source {
     my ($self, %args) = @_;
-    my $label = delete($args{label}) // do {
-        my $label = (caller 1)[0];
-        for($label) {
-            s/^Net::Async::/Na/g;
-            s/^IO::Async::/Ia/g;
-            s/^Web::Async::/Wa/g;
-            s/^Tickit::Async::/Ta/g;
-            s/^Tickit::Widget::/TW/g;
-            s/::([^:]*)$/->$1/;
-        }
-        $label
-    };
+    my $label = delete($args{label}) // $self->label;
     Ryu::Source->new(
         new_future    => $self->loop->curry::weak::new_future,
         apply_timeout => $self->curry::timeout,
@@ -598,25 +587,26 @@ your own label if you need consistency.
 
 sub sink {
     my ($self, %args) = @_;
-    my $label = delete($args{label}) // do {
-        my $label = (caller 1)[3];
-        for($label) {
-            s/^Database::Async::/Da/g;
-            s/^Net::Async::/Na/g;
-            s/^IO::Async::/Ia/g;
-            s/^Web::Async::/Wa/g;
-            s/^Job::Async::/Ja/g;
-            s/^Tickit::Async::/Ta/g;
-            s/^Tickit::Widget::/TW/g;
-            s/::([^:]*)$/->$1/;
-        }
-        $label
-    };
+    my $label = delete($args{label}) // $self->label;
     Ryu::Sink->new(
         new_future => $self->loop->curry::weak::new_future,
         label      => $label,
         %args,
     )
+}
+
+sub label {
+    my ($self) = @_;
+    my $label = (caller 2)[0];
+    for($label // ()) {
+        s/^Net::Async::/Na/g;
+        s/^IO::Async::/Ia/g;
+        s/^Web::Async::/Wa/g;
+        s/^Tickit::Async::/Ta/g;
+        s/^Tickit::Widget::/TW/g;
+        s/::([^:]*)$/->$1/;
+    }
+    return $label // 'unknown';
 }
 
 1;
